@@ -25,7 +25,7 @@ const root = {
     },
     courses: ({ topic }) => {
         if (topic !== '') {
-            console.log('Topic', topic);
+            // console.log('Topic', topic);
             return courseData.filter(course => course.topic === topic);
         } else {
             return courseData;
@@ -34,12 +34,16 @@ const root = {
     updateCourseTopic: ({ id, topic }) => {
         courseData.map(course => {
             if(course.id === id) {
-                course.topic = topic;
+                course.title = topic;
                 return topic;
             }
         });
 
         return courseData.filter(course => course.id === id)[0];
+    },
+    addCourse: ({ input }) => {
+        courseData.unshift(input);
+        return true;
     }
 };
 
