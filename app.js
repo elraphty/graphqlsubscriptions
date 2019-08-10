@@ -4,6 +4,8 @@ const schema = require('./graphql/schema');
 const rootValue = require('./graphql/root');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { execute, subscribe } = require('graphql');
+const { SubscriptionServer } = require('subscriptions-transport-ws');
 
 const app = express();
 
@@ -24,4 +26,12 @@ app.get('/', (req, res, next) => {
 
 app.listen(process.env.PORT || 7000, () => {
     console.log('App Runnning');
+    new SubscriptionServer({
+        execute,
+        subscribe,
+        schema,
+    }, {
+       server: app,
+       path: '/subscriptions' 
+    });
 });

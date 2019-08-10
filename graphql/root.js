@@ -1,3 +1,11 @@
+const { PubSub } = require('graphql-subscriptions');
+
+const ADDED = 'ADDED';
+const pubsub = new PubSub();
+exports.pubsub = pubsub;
+
+pubsub.asyncIterator(ADDED);
+
 // Including Mongoose Models 
 let courseData = [
     {
@@ -44,6 +52,10 @@ const root = {
     addCourse: ({ input }) => {
         courseData.unshift(input);
         return true;
+    },
+    commentAdded: ({repoFullName}) => {
+        pubsub.publish(ADDED, { userAdded: repoFullName });
+        return repoFullName;
     }
 };
 

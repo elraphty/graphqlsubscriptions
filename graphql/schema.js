@@ -3,6 +3,10 @@ const { buildSchema } = require('graphql');
 
 var schema = buildSchema(`
 
+  type Subscription {
+    commentAdded(repoFullName: String!): String
+  }
+
   input newCourse {
     id: Int!
     title: String
@@ -29,6 +33,12 @@ var schema = buildSchema(`
     description: String
     topic: String
     url: String
+  }
+
+  schema {
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
   }
 
 `);
