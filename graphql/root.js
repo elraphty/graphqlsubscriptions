@@ -18,6 +18,29 @@ let courseData = [
     }
 ];
 const root = {
+    course: ({ id }) => {
+        return courseData.filter(course => {
+            return course.id === id;
+        })[0];
+    },
+    courses: ({ topic }) => {
+        if (topic !== '') {
+            console.log('Topic', topic);
+            return courseData.filter(course => course.topic === topic);
+        } else {
+            return courseData;
+        }
+    },
+    updateCourseTopic: ({ id, topic }) => {
+        courseData.map(course => {
+            if(course.id === id) {
+                course.topic = topic;
+                return topic;
+            }
+        });
+
+        return courseData.filter(course => course.id === id)[0];
+    }
 };
 
 module.exports = root;

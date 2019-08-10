@@ -1,7 +1,7 @@
 const express = require('express');
 const graphHTTP = require('express-graphql');
-const schema = require('./schema/cchema');
-const rootValue = require('./schema/root');
+const schema = require('./graphql/schema');
+const rootValue = require('./graphql/root');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 

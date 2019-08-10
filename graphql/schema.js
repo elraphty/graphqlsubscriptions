@@ -4,20 +4,21 @@ const { buildSchema } = require('graphql');
 var schema = buildSchema(`
 
   type Query {
-    course(id: ID!): Author
-    courses(title: String): [Course]
+    course(id: Int!): Course
+    courses(topic: String): [Course]
+  }
+
+  type Mutation {
+    updateCourseTopic(id: Int!, topic: String): Course
   }
 
   type Course {
-    id: ID!
+    id: Int!
     title: String
     author: String
     description: String
     topic: String
     url: String
-  }
-
-  type Mutation {
   }
 
 `);
