@@ -1,10 +1,10 @@
-const { PubSub } = require('graphql-subscriptions');
+const { PubSub } = require('apollo-server-express');
 
-const ADDED = 'ADDED';
+const ADDED = 'added';
 const pubsub = new PubSub();
-exports.pubsub = pubsub;
+// exports.pubsub = pubsub;
 
-pubsub.asyncIterator(ADDED);
+// pubsub.asyncIterator(ADDED);
 
 // Including Mongoose Models 
 let courseData = [
@@ -26,36 +26,49 @@ let courseData = [
     }
 ];
 const root = {
-    course: ({ id }) => {
-        return courseData.filter(course => {
-            return course.id === id;
-        })[0];
+    Query: {
+        course: (root, { id }) => {
+            return courseData.filter(course => {
+                return course.id === id;
+            })[0];
+        },
+        courses: (root, { topic }) => {
+            if (topic !== '') {
+                // console.log('Topic', topic);
+                return courseData.filter(course => course.topic === topic);
+            } else {
+                return courseData;
+            }
+        },
     },
-    courses: ({ topic }) => {
-        if (topic !== '') {
-            // console.log('Topic', topic);
-            return courseData.filter(course => course.topic === topic);
-        } else {
-            return courseData;
+    Mutation: {
+        updateCourseTopic: (root, { id, topic }) => {
+            courseData.map(course => {
+                if (course.id === id) {
+                    course.title = topic;
+                    return topic;
+                }
+            });
+    
+            return courseData.filter(course => course.id === id)[0];
+        },
+        addCourse: (root, { input }) => {
+            courseData.unshift(input);
+            return true;
+        },
+        commentAdded: (root, {comment}) => {
+            // pubsub.publish(ADDED)
+            pubsub.publish(ADDED, { entry: comment });
+            return comment;
         }
     },
-    updateCourseTopic: ({ id, topic }) => {
-        courseData.map(course => {
-            if(course.id === id) {
-                course.title = topic;
-                return topic;
-            }
-        });
-
-        return courseData.filter(course => course.id === id)[0];
-    },
-    addCourse: ({ input }) => {
-        courseData.unshift(input);
-        return true;
-    },
-    commentAdded: ({repoFullName}) => {
-        pubsub.publish(ADDED, { userAdded: repoFullName });
-        return repoFullName;
+    Subscription: {
+        userAdded: {
+            resolve: (message) => {
+                return message.entry;
+            },
+            subscribe: () => pubsub.asyncIterator(ADDED)
+        }
     }
 };
 

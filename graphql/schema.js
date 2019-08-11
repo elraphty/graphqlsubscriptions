@@ -1,10 +1,11 @@
 const { buildSchema } = require('graphql');
+const { gql } = require('apollo-server-express');
 
 
-var schema = buildSchema(`
+var schema = gql`
 
   type Subscription {
-    commentAdded(repoFullName: String!): String
+    userAdded: String
   }
 
   input newCourse {
@@ -24,6 +25,7 @@ var schema = buildSchema(`
   type Mutation {
     addCourse(input: newCourse!): Boolean
     updateCourseTopic(id: Int!, topic: String): Course
+    commentAdded(comment: String!): String
   }
 
   type Course {
@@ -41,6 +43,6 @@ var schema = buildSchema(`
     subscription: Subscription
   }
 
-`);
+`;
 
 module.exports = schema;
