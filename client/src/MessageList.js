@@ -44,7 +44,7 @@ class Messages extends React.Component {
                 };
             },
         });
-        console.log('Props', this.props);
+        // console.log('Props', this.props);
     }
 
     render() {
