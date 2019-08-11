@@ -8,6 +8,9 @@ import { getMainDefinition } from 'apollo-utilities';
 import { ApolloProvider } from 'react-apollo';
 import './App.css';
 
+import NewMessage from './NewMessage';
+import ListMessage from './MessageList';
+
 // Create an http link:
 const httpLink = new HttpLink({
   uri: 'http://localhost:7000/graphql'
@@ -15,7 +18,7 @@ const httpLink = new HttpLink({
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:7000/subscriptions`,
+  uri: `ws://localhost:7000/graphql`,
   options: {
     reconnect: true
   }
@@ -36,7 +39,6 @@ const link = split(
   httpLink,
 );
 
-
 const cache = new InMemoryCache();
 const client = new ApolloClient({ link, cache });
 
@@ -44,6 +46,9 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div>
+        <h1>Hello Subscriptions trial</h1>
+        <NewMessage/>
+        <ListMessage/>
       </div>
     </ApolloProvider>
   );
