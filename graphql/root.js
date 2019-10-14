@@ -6,6 +6,8 @@ const pubsub = new PubSub();
 
 // pubsub.asyncIterator(ADDED);
 
+// pubsub.asyncIterator(ADDED);
+
 // Including Mongoose Models 
 let courseData = [
     {
@@ -25,6 +27,9 @@ let courseData = [
         url: 'https/google.com'
     }
 ];
+
+pubsub.asyncIterator(ADDED)
+
 const root = {
     Query: {
         course: (root, { id }) => {
@@ -49,22 +54,23 @@ const root = {
                     return topic;
                 }
             });
-    
+
             return courseData.filter(course => course.id === id)[0];
         },
         addCourse: (root, { input }) => {
             courseData.unshift(input);
             return true;
         },
-        commentAdded: (root, {comment}) => {
+        newCourseAdded: (root, { course }) => {
             // pubsub.publish(ADDED)
-            pubsub.publish(ADDED, { entry: comment });
-            return comment;
+            pubsub.publish(ADDED, { entry: course });
+            return course;
         }
     },
     Subscription: {
-        userAdded: {
+        newCourseAdded: {
             resolve: (message) => {
+                console.log('message', message.entry);
                 return message.entry;
             },
             subscribe: () => pubsub.asyncIterator(ADDED)

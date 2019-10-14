@@ -5,7 +5,7 @@ const { gql } = require('apollo-server-express');
 var schema = gql`
 
   type Subscription {
-    userAdded: String
+    newCourseAdded: Course
   }
 
   input newCourse {
@@ -25,7 +25,7 @@ var schema = gql`
   type Mutation {
     addCourse(input: newCourse!): Boolean
     updateCourseTopic(id: Int!, topic: String): Course
-    commentAdded(comment: String!): String
+    newCourseAdded(course: newCourse!): Course
   }
 
   type Course {
